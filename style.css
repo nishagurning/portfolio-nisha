@@ -4580,4 +4580,3 @@ nav ul li a.is-active{
         transform:translateX(calc(-1 * clamp(40px, 6.25vw, 80px)));
     }
 }
-

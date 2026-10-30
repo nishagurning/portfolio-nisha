@@ -465,7 +465,7 @@
                     <p class="contact-eyebrow">HUBUNGI SAYA</p>
                     <h2>Mari Terhubung<br>dan <span>Berdiskusi!</span></h2>
                     <p class="contact-desc">Saya selalu terbuka untuk kesempatan baru, kolaborasi, atau sekadar bertukar informasi. Silakan hubungi saya melalui kontak berikut.</p>
-                    <a class="contact-primary" href="mailto:damegurning3@email.com"><i class="fa-regular fa-paper-plane" aria-hidden="true"></i> Kirim Email</a>
+                    <a class="contact-primary" href="mailto:damegurning3@gmail.com"><i class="fa-regular fa-paper-plane" aria-hidden="true"></i> Kirim Email</a>
                 </div>
                 <div class="contact-portrait">
                     <img src="image/nisha7.jpeg" alt="Nisha Gurning di Institut Teknologi Del">
@@ -473,9 +473,9 @@
             </div>
 
             <div class="contact-links" aria-label="Informasi kontak dan media sosial">
-                <a class="contact-link" href="mailto:damegurning3@email.com">
+                <a class="contact-link" href="mailto:damegurning3@gmail.com">
                     <span class="contact-link-icon"><i class="fa-regular fa-envelope" aria-hidden="true"></i></span>
-                    <span><strong>Email</strong><small>damegurning3@email.com</small></span>
+                    <span><strong>Email</strong><small>damegurning3@gmail.com</small></span>
                 </a>
                 <a class="contact-link" href="https://github.com/nishagurning" target="_blank" rel="noopener noreferrer">
                     <span class="contact-link-icon"><i class="fab fa-github" aria-hidden="true"></i></span>
@@ -517,9 +517,9 @@
             <article class="contact-panel contact-message">
                 <div class="contact-panel-heading">
                     <span class="contact-panel-icon"><i class="fa-regular fa-paper-plane" aria-hidden="true"></i></span>
-                    <div><h3>Kirim Pesan</h3><p>Isi form berikut untuk menyiapkan pesan melalui aplikasi email.</p></div>
+                    <div><h3>Kirim Pesan</h3><p>Isi form berikut dan pesan Anda akan dikirim langsung ke email saya.</p></div>
                 </div>
-                <form class="contact-form" id="contact-form">
+                <form class="contact-form" id="contact-form" method="POST">
                     <label>Nama Lengkap *<input name="name" type="text" placeholder="Nama Anda" autocomplete="name" required></label>
                     <label>Email *<input name="email" type="email" placeholder="nama@email.com" autocomplete="email" required></label>
                     <label class="contact-form-wide">Subjek *
@@ -533,7 +533,7 @@
                     <label class="contact-form-wide">Pesan *<textarea name="message" rows="4" maxlength="500" placeholder="Tulis pesan Anda di sini..." required></textarea></label>
                     <div class="contact-form-footer contact-form-wide">
                         <span id="contact-message-count">0 / 500</span>
-                        <button type="submit"><i class="fa-regular fa-paper-plane" aria-hidden="true"></i> Siapkan Email</button>
+                        <button type="submit"><i class="fa-regular fa-paper-plane" aria-hidden="true"></i> Kirim Pesan</button>
                     </div>
                     <p class="contact-form-status contact-form-wide" id="contact-form-status" role="status" aria-live="polite"></p>
                 </form>
@@ -600,6 +600,7 @@ document.querySelectorAll('[data-project-filter]').forEach(filterButton => {
 const contactForm = document.querySelector('#contact-form');
 const contactMap = document.querySelector('.contact-map');
 const contactMapFrame = contactMap?.querySelector('iframe');
+const contactFormEndpoint = 'https://script.google.com/macros/s/AKfycbx6RKjKj7TMN2pxnulkvrAkdpiRUZd9miLDvTcmQr46dcoyr2puVl386QNwMfOt3aJdcw/exec';
 
 contactMapFrame?.addEventListener('load', () => {
     try {
@@ -621,16 +622,15 @@ if (contactForm) {
     });
 
     contactForm.addEventListener('submit', event => {
-        event.preventDefault();
-        if (!contactForm.reportValidity()) {
+        if (!contactFormEndpoint) {
+            event.preventDefault();
+            contactStatus.textContent = 'Form belum terhubung. Selesaikan setup Google Apps Script terlebih dahulu.';
             return;
         }
 
-        const formData = new FormData(contactForm);
-        const subject = encodeURIComponent(`${formData.get('subject')} - ${formData.get('name')}`);
-        const body = encodeURIComponent(`Nama: ${formData.get('name')}\nEmail: ${formData.get('email')}\n\n${formData.get('message')}`);
-        contactStatus.textContent = 'Membuka aplikasi email untuk mengirim pesan.';
-        window.location.href = `mailto:damegurning3@email.com?subject=${subject}&body=${body}`;
+        contactForm.action = contactFormEndpoint;
+        contactForm.target = '_blank';
+        contactStatus.textContent = 'Mengirim pesan... Hasil pengiriman akan terbuka di tab baru.';
     });
 }
 
